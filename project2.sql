@@ -91,7 +91,7 @@ OR regions.region_name = 'Europe');
 #Consider this later from below.
 SELECT location_id FROM (locations NATURAL JOIN departments NATURAL JOIN staff);
 
-# This is the LEGIT real code
+# This is the code to answer Question 8b
 SELECT city, country_name, region_name
 FROM regions LEFT JOIN countries
 ON regions.region_id = countries.region_id
@@ -104,31 +104,6 @@ OR locations.location_id IN (SELECT location_id FROM (locations NATURAL JOIN dep
 
 SELECT city, country_name, region_name
 
-
-
-# This is the real code
-SELECT city, country_name, region_name
-FROM regions INNER JOIN countries
-ON regions.region_id = countries.region_id
-INNER JOIN locations
-ON countries.country_id = locations.country_id
-INNER JOIN departments
-ON locations.location_id = departments.location_id
-WHERE departments.department_id IN (SELECT department_id
-FROM
-(
-SELECT departments.department_name, departments.department_id, count(staff_id) as num
-FROM staff LEFT JOIN departments
-ON staff.department_id = departments.department_id
-GROUP BY departments.department_id
-UNION
-SELECT departments.department_name, departments.department_id, count(staff_id) as num
-FROM staff RIGHT JOIN departments
-ON staff.department_id = departments.department_id
-GROUP BY departments.department_id
-) a
-WHERE num = 0
-);
 
 SELECT department_name, department_id, num, 
 FROM
